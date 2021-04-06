@@ -1,0 +1,27 @@
+services:
+  spire-agent:
+    privileged: true
+    pid: host
+    image: gcr.io/spiffe-io/spire-agent:0.12.0
+    volumes:
+      - ${PWD}/agent.conf:/opt/spire/conf/agent/agent.conf
+      - /tmp/sockets/:/run/spire/sockets/
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - -joinToken
+      - REPLACE_WITH_JOIN_TOKEN
+  envoy:
+    image: envoyproxy/envoy-alpine:v1.14.4
+    pid: host
+    volumes:
+      - ${PWD}/envoy.conf:/run/envoy/envoy.yaml
+      - /tmp/sockets/:/run/spire/sockets/
+    ports:
+      - 8080:8080
+    command:
+      - -l
+      - debug
+      - --local-address-ip-version
+      - v4
+      - --config-path
+      - /run/envoy/envoy.yaml
