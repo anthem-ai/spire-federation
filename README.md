@@ -2,7 +2,7 @@
 
 ## Replace the trust domain
 
-Run `scripts/replace-trust-domain.sh` to automtically replace all references of `example.com` with your own trust domain.
+Run `scripts/replace-trust-domain.sh` to automatically replace all references of `example.com` with your own trust domain.
 
 ## Launch SPIRE Server
 
