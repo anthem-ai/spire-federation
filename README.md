@@ -16,7 +16,7 @@ Run `scripts/trust-anthem-trust-bundle.sh` to pull the AnthemAI Certificate Auth
 
 ## Create join token and edit `docker-compose.services.yml`
 
-Run `scripts/create-envoy-spire-entry.sh`, this will create a join token for the spire agent which is used to modify the file below.
+Run `scripts/create-join-token.sh`, this will create a join token for the spire agent which is used to modify the file below.
 
 Example: `docker-compose.services.yml`
 ```diff
