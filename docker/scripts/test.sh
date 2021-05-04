@@ -20,6 +20,7 @@ cleanup
 ./scripts/1-template-files.sh example-values.yaml
 
 docker-compose -p spire -f docker-compose.server.yml up -d
+sleep 5
 ./scripts/2-trust-anthem.sh
 ./scripts/3-spire-registration.sh
 

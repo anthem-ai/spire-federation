@@ -8,4 +8,4 @@ services:
     volumes:
       - ${PWD}/conf/server.conf:/opt/spire/conf/server/server.conf
       - ${PWD}/certs/ca.pem:/opt/spire/ca.pem
-      - "/tmp/spire/:/opt/spire/data/"
+      - "/data/spire/:/opt/spire/data/"
