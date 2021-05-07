@@ -1,0 +1,11 @@
+internal:
+  spire:
+    trust_domain: example.org
+anthem:
+  spire:
+    trust_domain: anthemai.io
+    hostname: spire.anthemai.io
+    port: 443
+  gateway:
+    hostname: gateway.anthemai.io
+    port: 443

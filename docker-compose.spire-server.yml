@@ -1,9 +1,0 @@
-services:
-  server:
-    ports:
-      - "8081:8081"
-      - "443:443"
-    image: gcr.io/spiffe-io/spire-server:0.12.0
-    volumes:
-      - ${PWD}/server.conf:/opt/spire/conf/server/server.conf
-      - "/data/spire/:/opt/spire/data/"

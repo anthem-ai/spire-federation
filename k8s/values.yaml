@@ -1,0 +1,34 @@
+image:
+  tag: "0.12.0"
+
+anthem:
+  spire:
+    trust_domain: anthemai.io
+    hostname: anthemai.io
+    port: 443
+  gateway:
+    hostname: gateway.anthemai.io
+    port: 443
+
+envoy:
+  serviceType: NodePort
+
+storage:
+  size: 10Gi
+
+trustedDomain: example.org
+
+clusterName: demo-cluster
+
+federation:
+  service:
+    type: LoadBalancer
+    annotations:
+      #external-dns.alpha.kubernetes.io/hostname: federation.spire.example.org
+  bundle_endpoint:
+    address: 0.0.0.0
+    port: 443
+  federates_with:
+  #- trust_domain: example.com
+  #  address: federation.spire.example.com
+  #  port: 443
