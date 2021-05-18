@@ -1,11 +1,13 @@
 internal:
   spire:
-    trust_domain: example.org
+    trust_domain: example.org # REPLACE_ME
+    hostname: spire.example.org # REPLACE_ME
+    admin_email: webmaster@example.org # REPLACE_ME
 anthem:
   spire:
-    trust_domain: anthemai.io
-    hostname: spire.anthemai.io
+    trust_domain: REPLACE_ME
+    hostname: REPLACE_ME
     port: 443
   gateway:
-    hostname: gateway.anthemai.io
+    hostname: REPLACE_ME
     port: 443
