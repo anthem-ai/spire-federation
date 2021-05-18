@@ -16,6 +16,11 @@ data:
           bundle_endpoint {
               address = "{{ .Values.federation.bundle_endpoint.address }}"
               port = "{{ .Values.federation.bundle_endpoint.port }}"
+              acme {
+                  domain_name = "{{ .Values.federation.service.hostname }}"
+                  email = "{{ .Values.federation.service.admin_email }}"
+                  tos_accepted = true
+              }
           }
 
           {{- range .Values.federation.federates_with }}

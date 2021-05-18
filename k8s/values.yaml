@@ -1,13 +1,13 @@
 image:
-  tag: "0.12.0"
+  tag: "0.12.2"
 
 anthem:
   spire:
-    trust_domain: anthemai.io
-    hostname: anthemai.io
+    trust_domain: REPLACE_ME
+    hostname: REPLACE_ME
     port: 443
   gateway:
-    hostname: gateway.anthemai.io
+    hostname: REPLACE_ME
     port: 443
 
 envoy:
@@ -23,6 +23,8 @@ clusterName: demo-cluster
 federation:
   service:
     type: LoadBalancer
+    hostname: federation.spire.example.org
+    admin_email: webmaster@example.org
     annotations:
       #external-dns.alpha.kubernetes.io/hostname: federation.spire.example.org
   bundle_endpoint:
