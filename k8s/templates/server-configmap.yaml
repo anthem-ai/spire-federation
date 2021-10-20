@@ -11,16 +11,17 @@ data:
       registration_uds_path = "/tmp/spire-registration.sock"
       trust_domain = "{{ .Values.trustedDomain }}"
 
-      {{- if .Values.federation.enabled }}
       federation {
           bundle_endpoint {
               address = "{{ .Values.federation.bundle_endpoint.address }}"
               port = "{{ .Values.federation.bundle_endpoint.port }}"
+              {{- if .Values.federation.letsencrypt }}
               acme {
                   domain_name = "{{ .Values.federation.service.hostname }}"
                   email = "{{ .Values.federation.service.admin_email }}"
                   tos_accepted = true
               }
+              {{- end }}
           }
 
           {{- range .Values.federation.federates_with }}
@@ -32,7 +33,6 @@ data:
           }
           {{- end }}
       }
-      {{- end }}
 
       data_dir = "/run/spire/data"
       log_level = "DEBUG"

@@ -21,6 +21,7 @@ trustedDomain: example.org
 clusterName: demo-cluster
 
 federation:
+  letsencrypt: true
   service:
     type: LoadBalancer
     hostname: federation.spire.example.org
