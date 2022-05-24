@@ -26,7 +26,7 @@ sleep 5
 
 docker-compose -p spire -f docker-compose.services.yml up -d
 
-docker logs -f spire_agent_1
+docker logs -f spire-agent-1
 wait
 
 cleanup
