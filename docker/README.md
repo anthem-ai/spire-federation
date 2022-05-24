@@ -47,7 +47,6 @@ docker-compose -p spire -f docker-compose.server.yml up -d
 
 Run `chmod +x ./scripts/2-trust-anthem-trust-bundle.sh && ./scripts/2-trust-anthem-trust-bundle.sh` to pull the AnthemAI certificate authority and add it to your spire server.
 
-
 ## Create SPIRE SVID for envoy docker image
 
 Run `chmod +x ./scripts/3-spire-registration.sh && ./scripts/3-spire-registration.sh`, this will create a SPIRE entry/certificate for the envoy container.
