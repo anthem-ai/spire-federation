@@ -19,5 +19,8 @@ spec:
       port: {{ .Values.federation.bundle_endpoint.port }}
       targetPort: {{ .Values.federation.bundle_endpoint.port }}
       protocol: TCP
+      {{- if .Values.federation.service.nodePort }}
+      nodePort: {{- .Values.federation.service.nodePort }}
+      {{- end }}
   selector:
     app: spire-server

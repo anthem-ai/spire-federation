@@ -12,6 +12,7 @@ anthem:
 
 envoy:
   serviceType: NodePort
+  #nodePort:
 
 storage:
   size: 10Gi
@@ -26,6 +27,7 @@ federation:
     type: LoadBalancer
     hostname: federation.spire.example.org
     admin_email: webmaster@example.org
+    #nodePort:
     annotations:
       #external-dns.alpha.kubernetes.io/hostname: federation.spire.example.org
   bundle_endpoint:

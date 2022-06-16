@@ -9,7 +9,10 @@ spec:
   - name: grpc
     port: 8080
     targetPort: 8080
-    protocol: TCP 
+    protocol: TCP
+    {{- if .Values.envoy.nodePort }}
+    nodePort: {{- .Values.envoy.nodePort }}
+    {{- end }}
   selector:
     name: envoy
 ---
