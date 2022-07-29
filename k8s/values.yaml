@@ -14,6 +14,8 @@ envoy:
   serviceType: NodePort
   #nodePort:
 
+socketDir: /run/spire/sockets
+
 storage:
   size: 10Gi
 
