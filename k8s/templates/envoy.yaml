@@ -134,5 +134,5 @@ spec:
             name: envoy
         - name: spire-agent-socket
           hostPath:
-            path: /run/spire/sockets
+            path: "{{ .Values.socketPath }}"
             type: DirectoryOrCreate

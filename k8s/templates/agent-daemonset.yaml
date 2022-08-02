@@ -62,5 +62,5 @@ spec:
             name: spire-bundle
         - name: spire-agent-socket
           hostPath:
-            path: "{{ .Values.socketDir }}"
+            path: "{{ .Values.socketPath }}"
             type: DirectoryOrCreate
