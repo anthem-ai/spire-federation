@@ -6,29 +6,17 @@ data:
   bootstrap.sh: |
     #!/usr/bin/env sh
 
-    # install deps
-    apk update && apk add curl
-
-    # grab trust bundle from anthem
-    curl -k "https://{{ .Values.anthem.spire.hostname }}:{{ .Values.anthem.spire.port }}" > /tmp/test.json
-
-    # add the trust bundle we downloaded to our certificate store
-    ./bin/spire-server bundle set \
-        -format spiffe \
-        -id "spiffe://{{ .Values.anthem.spire.trust_domain }}" \
-        -path /tmp/test.json
-
     # create spire agent svid
     /opt/spire/bin/spire-server entry create \
-        -spiffeID "spiffe://{{ .Values.trustedDomain }}/ns/{{ .Release.Namespace }}/sa/spire-agent" \
+        -spiffeID "spiffe://{{ .Values.partnerTrustDomain }}/ns/{{ .Release.Namespace }}/sa/spire-agent" \
         -selector "k8s_sat:cluster:{{ .Values.clusterName }}" \
         -selector "k8s_sat:agent_ns:{{ .Release.Namespace }}" \
         -selector k8s_sat:agent_sa:spire-agent \
         -node
 
-    # create envoy svid
+    # create hos-proxy svid
     ./bin/spire-server entry create \
-        -parentID "spiffe://{{ .Values.trustedDomain }}/ns/{{ .Release.Namespace }}/sa/spire-agent" \
-        -spiffeID "spiffe://{{ .Values.trustedDomain }}/ns/{{ .Release.Namespace }}/sa/envoy" \
+        -parentID "spiffe://{{ .Values.partnerTrustDomain }}/ns/{{ .Release.Namespace }}/sa/spire-agent" \
+        -spiffeID "spiffe://{{ .Values.partnerTrustDomain }}/ns/{{ .Release.Namespace }}/sa/hos-proxy" \
         -selector "k8s:ns:{{ .Release.Namespace }}" \
-        -federatesWith "spiffe://{{ .Values.anthem.spire.trust_domain }}"
+        -federatesWith "spiffe://{{ .Values.carelon.spire.trustDomain }}"

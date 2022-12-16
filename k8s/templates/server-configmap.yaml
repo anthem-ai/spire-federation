@@ -8,36 +8,31 @@ data:
     server {
       bind_address = "0.0.0.0"
       bind_port = "8081"
-      registration_uds_path = "/tmp/spire-registration.sock"
-      trust_domain = "{{ .Values.trustedDomain }}"
-
-      federation {
-          bundle_endpoint {
-              address = "{{ .Values.federation.bundle_endpoint.address }}"
-              port = "{{ .Values.federation.bundle_endpoint.port }}"
-              {{- if .Values.federation.letsencrypt }}
-              acme {
-                  domain_name = "{{ .Values.federation.service.hostname }}"
-                  email = "{{ .Values.federation.service.admin_email }}"
-                  tos_accepted = true
-              }
-              {{- end }}
-          }
-
-          {{- range .Values.federation.federates_with }}
-          federates_with "{{ .trust_domain }}" {
-              bundle_endpoint {
-                  address = "{{ .address }}"
-                  port = {{ .port }}
-              }
-          }
-          {{- end }}
-      }
-
+      socket_path = "/tmp/spire-server/private/api.sock"
+      trust_domain = "{{ .Values.partnerTrustDomain }}"
       data_dir = "/run/spire/data"
-      log_level = "DEBUG"
+      log_level = "INFO"
       #AWS requires the use of RSA.  EC cryptography is not supported
       ca_key_type = "rsa-2048"
+
+      federation {
+        bundle_endpoint {
+          address = "0.0.0.0"
+          port = "443"
+          {{- if .Values.federation.letsencrypt }}
+          acme {
+              domain_name = "{{ .Values.federation.service.hostname }}"
+              email = "{{ .Values.federation.service.admin_email }}"
+              tos_accepted = true
+          }
+          {{- end }}
+        }
+
+        federates_with "{{ .Values.carelon.spire.trustDomain }}" {
+          bundle_endpoint_url = "{{ .Values.carelon.spire.bundle_endpoint_url }}"
+          bundle_endpoint_profile "https_web" {}
+        }
+      }
 
       default_svid_ttl = "1h"
       ca_subject = {
@@ -45,12 +40,6 @@ data:
         organization = ["SPIFFE"],
         common_name = "",
       }
-    }
-
-    telemetry {
-      DogStatsd = [
-        { address = "${DD_AGENT_HOST}:8125" }
-      ]
     }
 
     plugins {
@@ -64,17 +53,12 @@ data:
       NodeAttestor "k8s_sat" {
         plugin_data {
           clusters = {
-            # NOTE: Change this to your cluster name
             "{{ .Values.clusterName }}" = {
               use_token_review_api_validation = true
-              service_account_whitelist = ["{{ .Release.Namespace }}:spire-agent"]
+              service_account_allow_list = ["{{ .Release.Namespace }}:spire-agent"]
             }
           }
         }
-      }
-
-      NodeResolver "noop" {
-        plugin_data {}
       }
 
       KeyManager "disk" {
@@ -88,4 +72,12 @@ data:
           namespace = "{{ .Release.Namespace }}"
         }
       }
+    }
+
+    health_checks {
+      listener_enabled = true
+      bind_address = "0.0.0.0"
+      bind_port = "8080"
+      live_path = "/live"
+      ready_path = "/ready"
     }
