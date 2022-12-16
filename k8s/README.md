@@ -1,35 +1,60 @@
 # Instructions
 
-# Fill out the required variables
+# Customize Variables
 
-Before beginning, the following values need to be determined. You can use the file `values.yaml` as a template.
+Before proceeding, you will need to set some variables specific to your configuration. Update all values that are set 
+to `REPLACE_ME` in the `uat.values.yaml` or `prod.values.yaml` file:
 
-```
-trustedDomain: # the trust domain for your spire server
-anthem:
+```yaml
+########### CUSTOMIZE VALUES IN THIS SECTION ###########
+
+# The trust domain for your SPIRE server (ie: example.org)
+partnerTrustDomain: REPLACE_ME
+partnerShortName: REPLACE_ME
+carelon:
   spire:
-    trust_domain: # the trust domain for the anthem spire server
-    hostname: # hostname of the anthem spire federation endpoint
-    port: # port of the anthem spire federation endpoint
+    # The trust domain for the Carelon SPIRE server
+    trustDomain: REPLACE_ME
+    # Full URL for SPIRE trust bundle
+    bundle_endpoint_url: REPLACE_ME
   gateway:
-    hostname: # hostname of the anthem hos gateway
-    port: # port of the anthem hos gateway
+    # Hostname of the Carelon HOS gateway
+    host: REPLACE_ME
+federation:
+  letsencrypt: true
+  service:
+    type: NodePort
+    nodePort: REPLACE_ME
+    # Domain that will be trusted by letsencrypt (only required if letsencrypt is true)
+    hostname: REPLACE_ME
+    admin_email: REPLACE_ME
+
+########### END CUSTOMIZED VALUES ###########
+```
+
+## Set K8s Context and Create Namespace
+
+Set the context for the target cluster where SPIRE will run and create namespace:
+
+```shell
+kubectl config use-context <YOUR_CLUSTER>
+kubectl create namespace spire-v1
 ```
 
 ## Install Helm Chart
 
-```bash
-$ helm install spire -f values.yaml .
-Release "spire" has been installed. Happy Helming!
-NAME: spire
-...
+```shell
+# Use the values file corresponding to the desired federation environment
+helm install spire-v1 -n spire-v1 -f uat.values.yaml .
+Release "spire-v1" has been installed. Happy Helming!
+NAME: spire-v1
 ```
 
 ## Bootstrap the server
 
-Inside the `spire-server-0` pod, run the `/run/spire/bootstrap/bootstrap.sh` script to pull the anthem trust bundle and create the envoy spire entry.
+Inside the `spire-server-0` pod, run the `/run/spire/bootstrap/bootstrap.sh` script to pull the Carelon trust bundle 
+and create the Envoy SPIRE entry.
 
-```bash
-$ kubectl exec -it spire-server-0 /run/spire/bootstrap/bootstrap.sh
-...
+```shell
+kubectl -n spire-v1 exec -it spire-server-0 -- /run/spire/bootstrap/bootstrap.sh
 ```

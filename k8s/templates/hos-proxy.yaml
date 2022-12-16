@@ -1,0 +1,67 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hos-proxy
+spec:
+  type: {{ .Values.hosProxy.serviceType }}
+  ports:
+  - name: grpc
+    port: 5000
+    targetPort: 5000
+    protocol: TCP
+    {{- if .Values.hosProxy.nodePort }}
+    nodePort: {{ .Values.hosProxy.nodePort }}
+    {{- end }}
+  selector:
+    name: hos-proxy
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hos-proxy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hos-proxy
+  labels:
+    name: hos-proxy
+spec:
+  selector:
+    matchLabels:
+      name: hos-proxy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: hos-proxy
+    spec:
+      serviceAccountName: hos-proxy
+      containers:
+        - name: ghostunnel
+          args:
+          - client
+          - --use-workload-api-addr
+          - unix:///run/spire/sockets/agent.sock
+          - --listen
+          - 0.0.0.0:5000
+          - --target
+          - {{ .Values.carelon.gateway.host }}
+          - --verify-uri
+          - spiffe://{{ .Values.carelon.spire.trustDomain }}/ns/spire-v1/sa/hos-proxy-{{ .Values.partnerShortName }}
+          - --unsafe-listen
+          image: ghostunnel/ghostunnel:v1.7.1
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /run/spire/sockets
+            name: spire-agent-socket
+            readOnly: true
+      volumes:
+        - name: spire-agent-socket
+          hostPath:
+            path: "{{ .Values.socketPath }}/{{ .Release.Namespace }}"
+            type: DirectoryOrCreate

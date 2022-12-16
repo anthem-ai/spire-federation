@@ -12,19 +12,12 @@ data:
       server_port = "8081"
       socket_path = "/run/spire/sockets/agent.sock"
       trust_bundle_path = "/run/spire/bundle/bundle.crt"
-      trust_domain = "{{ .Values.trustedDomain }}"
-    }
-
-    telemetry {
-      DogStatsd = [
-        { address = "${DD_AGENT_HOST}:8125" }
-      ]
+      trust_domain = "{{ .Values.partnerTrustDomain }}"
     }
 
     plugins {
       NodeAttestor "k8s_sat" {
         plugin_data {
-          # NOTE: Change this to your cluster name
           cluster = "{{ .Values.clusterName }}"
         }
       }
@@ -47,4 +40,12 @@ data:
           plugin_data {
           }
       }
+    }
+
+    health_checks {
+      listener_enabled = true
+      bind_address = "0.0.0.0"
+      bind_port = "8080"
+      live_path = "/live"
+      ready_path = "/ready"
     }
