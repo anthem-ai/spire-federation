@@ -1,9 +1,9 @@
-# Instructions
+# Kubernetes Instructions
 
-# Customize Variables
+## Customize Variables
 
-Before proceeding, you will need to set some variables specific to your configuration. Update all values that are set 
-to `REPLACE_ME` in the `uat.values.yaml` or `prod.values.yaml` file:
+Before proceeding, some variables specific to your configuration will need to be set. Copy `example.values.yaml` to a
+new file (ie: `values.yaml`) and update all values that are set to `REPLACE_ME`:
 
 ```yaml
 ########### CUSTOMIZE VALUES IN THIS SECTION ###########
@@ -27,6 +27,7 @@ federation:
     nodePort: REPLACE_ME
     # Domain that will be trusted by letsencrypt (only required if letsencrypt is true)
     hostname: REPLACE_ME
+    # Admin email used by letsencrypt
     admin_email: REPLACE_ME
 
 ########### END CUSTOMIZED VALUES ###########
@@ -45,7 +46,7 @@ kubectl create namespace spire-v1
 
 ```shell
 # Use the values file corresponding to the desired federation environment
-helm install spire-v1 -n spire-v1 -f uat.values.yaml .
+helm install spire-v1 -n spire-v1 -f values.yaml .
 Release "spire-v1" has been installed. Happy Helming!
 NAME: spire-v1
 ```

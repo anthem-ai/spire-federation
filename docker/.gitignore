@@ -1,0 +1,9 @@
+certs/*
+!certs/gencerts.sh
+!certs/ca.json
+!certs/service.json
+conf/
+scripts/2-*
+scripts/3-*
+docker-compose.server.yaml
+docker-compose.services.yaml
