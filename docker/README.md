@@ -55,15 +55,6 @@ Run the following to generate templates with your customized values file.
 docker compose -p spire-v1 -f docker-compose.server.yaml up -d
 ```
 
-## Trust the Carelon SPIRE Server
-
-Run the following to pull the Carelon certificate authority and add it to your SPIRE server:
-
-```shell
-chmod +x ./scripts/2-trust-carelon-trust-bundle.sh
-./scripts/2-trust-carelon-trust-bundle.sh
-```
-
 ## Create SPIRE SVID for proxy docker image
 
 Run the following to create a SPIRE entry/certificate for the proxy container:

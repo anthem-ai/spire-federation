@@ -2,8 +2,10 @@
 
 ## Customize Variables
 
-Before proceeding, some variables specific to your configuration will need to be set. Copy `example.values.yaml` to a
-new file (ie: `values.yaml`) and update all values that are set to `REPLACE_ME`:
+Before proceeding, some variables specific to your configuration will need to be set.
+
+Make a file for your custom values. Copy `example.values.yaml` to a
+new file (ie: `custom_values.yaml`) and update all values that are set to `REPLACE_ME`:
 
 ```yaml
 ########### CUSTOMIZE VALUES IN THIS SECTION ###########
@@ -46,7 +48,7 @@ kubectl create namespace spire-v1
 
 ```shell
 # Use the values file corresponding to the desired federation environment
-helm install spire-v1 -n spire-v1 -f values.yaml .
+helm install spire-v1 -n spire-v1 -f values.yaml -f custom_values.yaml .
 Release "spire-v1" has been installed. Happy Helming!
 NAME: spire-v1
 ```
