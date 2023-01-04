@@ -13,10 +13,7 @@ carelon:
     # Hostname of the Carelon HOS gateway
     host: REPLACE_ME
 federation:
-  letsencrypt: true
   service:
-    type: NodePort
-    nodePort: REPLACE_ME
     # Domain that will be trusted by letsencrypt (only required if letsencrypt is true)
     hostname: REPLACE_ME
     # Admin email used by letsencrypt
@@ -28,10 +25,10 @@ image:
   # The SPIRE version
   tag: "1.5.2"
 
-clusterName: spire-federated-cluster
-socketPath: /run/spire/sockets
-storage:
-  size: 10Gi
+proxy:
+  image:
+    # The Ghostunnel version
+    tag: "v1.7.1"
 
-hosProxy:
-  serviceType: NodePort
+logLevel: INFO
+socketPath: /run/spire/sockets

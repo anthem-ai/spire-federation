@@ -21,17 +21,3 @@ federation:
     hostname: REPLACE_ME
     # Admin email used by letsencrypt
     admin_email: REPLACE_ME
-
-########### END CUSTOMIZED VALUES ###########
-
-image:
-  # The SPIRE version
-  tag: "1.5.2"
-
-clusterName: spire-federated-cluster
-socketPath: /run/spire/sockets
-storage:
-  size: 10Gi
-
-hosProxy:
-  serviceType: NodePort
