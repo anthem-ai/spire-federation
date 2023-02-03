@@ -1,10 +1,27 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: spire-bootstrap
+  name: spire-init
 data:
-  bootstrap.sh: |
+  init.sh: |
     #!/usr/bin/env sh
+
+    # launch spire server
+    /opt/spire/bin/spire-server run -config /run/spire/config/server.conf &
+    SPIRE_SERVER_PID="$!"
+
+    # wait for spire server to come up
+    while ! ./bin/spire-server healthcheck
+    do
+        echo "Waiting for SPIRE Server to come up"
+        sleep 5s
+    done
+
+    # delete all existing svids, make a clean slate
+    for ENTRY in $(./bin/spire-server entry show | grep "Entry ID" | awk '{print $4}')
+    do
+        ./bin/spire-server entry delete -entryID "${ENTRY}"
+    done
 
     # create spire agent svid
     /opt/spire/bin/spire-server entry create \
@@ -19,4 +36,7 @@ data:
         -parentID "spiffe://{{ .Values.partnerTrustDomain }}/ns/{{ .Release.Namespace }}/sa/spire-agent" \
         -spiffeID "spiffe://{{ .Values.partnerTrustDomain }}/ns/{{ .Release.Namespace }}/sa/hos-proxy" \
         -selector "k8s:ns:{{ .Release.Namespace }}" \
-        -federatesWith "spiffe://{{ .Values.carelon.spire.trustDomain }}"
+        -federatesWith "spiffe://{{ .Values.carelon.spire.trustDomain }}" &
+    
+    # wait on the spire server PID
+    wait "$SPIRE_SERVER_PID"

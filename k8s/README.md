@@ -52,12 +52,3 @@ helm install spire-v1 -n spire-v1 -f values.yaml -f custom_values.yaml .
 Release "spire-v1" has been installed. Happy Helming!
 NAME: spire-v1
 ```
-
-## Bootstrap the server
-
-Inside the `spire-server-0` pod, run the `/run/spire/bootstrap/bootstrap.sh` script to pull the Carelon trust bundle 
-and create the Envoy SPIRE entry.
-
-```shell
-kubectl -n spire-v1 exec -it spire-server-0 -- /run/spire/bootstrap/bootstrap.sh
-```
