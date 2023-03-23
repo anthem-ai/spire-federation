@@ -67,10 +67,19 @@ spec:
           - |
             while true; do
               sleep 15s
-              /bin/grpcurl -plaintext localhost:5000 list
+              /bin/grpcurl -plaintext localhost:5000 list &
               echo "------------------------"
               sleep 15s
             done
+          readinessProbe:
+            exec:
+              command:
+              - /bin/grpcurl
+              - -plaintext
+              - localhost:5000
+              - list
+            initialDelaySeconds: 30
+            periodSeconds: 30
           image: fullstorydev/grpcurl:v1.8.7-alpine
       volumes:
         - name: spire-agent-socket
