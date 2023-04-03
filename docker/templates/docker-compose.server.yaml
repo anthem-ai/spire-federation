@@ -1,0 +1,11 @@
+services:
+  server:
+    restart: always
+    ports:
+      - "8081:8081"
+      - "443:443"
+    image: gcr.io/spiffe-io/spire-server:{{ (datasource "values").image.tag }}
+    volumes:
+      - ${PWD}/conf/server.conf:/opt/spire/conf/server/server.conf
+      - ${PWD}/certs/ca.pem:/opt/spire/ca.pem
+      - ${PWD}/data/spire/:/opt/spire/data/

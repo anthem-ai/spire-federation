@@ -1,0 +1,31 @@
+services:
+  agent:
+    restart: always
+    privileged: true
+    pid: host
+    image: gcr.io/spiffe-io/spire-agent:{{ (datasource "values").image.tag }}
+    volumes:
+      - ${PWD}/conf/agent.conf:/opt/spire/conf/agent/agent.conf
+      - ${PWD}/certs/service.pem:/opt/spire/service.pem
+      - ${PWD}/certs/service-key.pem:/opt/spire/service-key.pem
+      - /tmp/sockets/:{{ (datasource "values").socketPath }}/
+      - /var/run/docker.sock:/var/run/docker.sock
+  ghostunnel:
+    restart: always
+    image: ghostunnel/ghostunnel:{{ (datasource "values").proxy.image.tag }}
+    pid: host
+    volumes:
+      - /tmp/sockets/:{{ (datasource "values").socketPath }}/
+    ports:
+      - 8080:8080
+    command:
+      - client
+      - --use-workload-api-addr
+      - unix:///run/spire/sockets/agent.sock
+      - --listen
+      - 0.0.0.0:5000
+      - --target
+      - {{ (datasource "values").carelon.gateway.host }}
+      - --verify-uri
+      - spiffe://{{ (datasource "values").carelon.spire.trustDomain }}/ns/spire-v1/sa/hos-proxy-{{ (datasource "values").partnerShortName }}
+      - --unsafe-listen
