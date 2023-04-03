@@ -13,6 +13,7 @@ carelon:
     # Hostname of the Carelon HOS gateway
     host: REPLACE_ME
 federation:
+  letsencrypt: true # set to true to get a free TLS certificate from letsencrypt for the federation endpoint
   service:
     # Domain that will be trusted by letsencrypt (only required if letsencrypt is true)
     hostname: REPLACE_ME
