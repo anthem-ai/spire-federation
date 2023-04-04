@@ -13,6 +13,7 @@ carelon:
     # Hostname of the Carelon HOS gateway
     host: REPLACE_ME
 federation:
+  bindPort: 443
   letsencrypt: true
   service:
     type: NodePort

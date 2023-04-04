@@ -17,7 +17,7 @@ spec:
   ports:
     - name: federation
       port: 443
-      targetPort: 443
+      targetPort: {{ .Values.federation.bindPort }}
       protocol: TCP
       {{- if .Values.federation.service.nodePort }}
       nodePort: {{ .Values.federation.service.nodePort }}

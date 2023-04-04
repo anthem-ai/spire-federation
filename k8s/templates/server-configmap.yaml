@@ -18,7 +18,7 @@ data:
       federation {
         bundle_endpoint {
           address = "0.0.0.0"
-          port = "443"
+          port = "{{ .Values.federation.bindPort }}"
           {{- if .Values.federation.letsencrypt }}
           acme {
               domain_name = "{{ .Values.federation.service.hostname }}"
