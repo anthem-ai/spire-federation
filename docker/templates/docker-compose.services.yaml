@@ -29,7 +29,7 @@ services:
       - --verify-uri
       - spiffe://{{ (datasource "values").carelon.spire.trustDomain }}/ns/spire-v1/sa/hos-proxy-{{ (datasource "values").partnerShortName }}
       - --unsafe-listen
- grpcurl:
+  grpcurl:
     restart: always
     image: fullstorydev/grpcurl:v1.8.7-alpine
     pid: host
