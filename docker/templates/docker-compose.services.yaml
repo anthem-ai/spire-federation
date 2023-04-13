@@ -29,3 +29,18 @@ services:
       - --verify-uri
       - spiffe://{{ (datasource "values").carelon.spire.trustDomain }}/ns/spire-v1/sa/hos-proxy-{{ (datasource "values").partnerShortName }}
       - --unsafe-listen
+ grpcurl:
+    restart: always
+    image: fullstorydev/grpcurl:v1.8.7-alpine
+    pid: host
+    command:
+      - /bin/sh
+      - -c
+      - --
+      - |
+        while true; do
+          sleep 15s
+          /bin/grpcurl -plaintext localhost:5000 list &
+          echo "------------------------"
+          sleep 15s
+        done
